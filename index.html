@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      th,
+      td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+
+      th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <table id="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Organization Name</th>
+          <th>Organization Details</th>
+          <th>Organization Address</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <!-- Table body will be populated by JavaScript -->
+      </tbody>
+    </table>
+
+    <script>
+      // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint URL
+      const apiUrl = "https://localhost:44314/api/Organization/1";
+      // Replace 'YOUR_BEARER_TOKEN' with the actual bearer token
+      const bearerToken =
+        "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNTYwZGQ1Yy0wMzY4LTQyMTAtODE5OC01NjJjN2JmNzNmMmMiLCJuYW1lIjoiYWRtaW5pc3RyYXRvckBsb2NhbGhvc3QiLCJlbWFpbCI6ImFkbWluaXN0cmF0b3JAbG9jYWxob3N0IiwianRpIjoiMWRiYmM0MjMtZDBjYi00Y2ViLWE3ZTQtZGRjNDM4ZTc3ZmRmIiwibmJmIjoxNjkwMDMwMzE4LCJleHAiOjE2OTAwMzE1MTgsImlhdCI6MTY5MDAzMDMxOH0.v6JagP3tviLzYo02ffvQIRsRQZzCXDjfIMhPONp8bq8iHz7p8z7Cdr5J-DkfuAB2ynP28sDhx1dEJ21KJF8Xiw";
+
+      // Function to fetch data from the API using bearer token
+      async function fetchDataWithToken() {
+        try {
+          const response = await fetch(apiUrl, {
+            headers: {
+              method: "GET",
+              Authorization: `Bearer ${bearerToken}`,
+            },
+          });
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          return [];
+        }
+      }
+
+      // Function to populate the table with JSON data
+      async function populateTable() {
+        const tableBody = document.getElementById("table-body");
+        const data = await fetchDataWithToken();
+        console.log(data);
+       
+          const row = document.createElement("tr");
+          row.innerHTML = `
+          
+          <td>${data.id}</td>
+          <td>${data.organizationName}</td>
+          <td>${data.organizationDetails}</td>
+          <td>${data.organizationAddress}</td>
+        `;
+          tableBody.appendChild(row);
+      
+      }
+
+      // Call the function to populate the table when the page loads
+      populateTable();
+    </script>
+  </body>
+</html>
